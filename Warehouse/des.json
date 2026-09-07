@@ -1,0 +1,57 @@
+{
+    "categories": [
+        {
+            "id": "clothing",
+            "name": "衣服",
+            "icon": "",
+            "description": "主要收纳衣服的仓库",
+            "sub_categories": [
+                {
+                    "id": "tops",
+                    "name": "上衣",
+                    "icon": "",
+                    "description": "包含短袖、长袖、外套等各种上衣类型"
+                },
+                {
+                    "id": "bottoms",
+                    "name": "下装",
+                    "icon": "",
+                    "description": "包含裤子、裙子等"
+                },
+                {
+                    "id": "outerwear",
+                    "name": "外套",
+                    "icon": "",
+                    "description": "包含风衣、夹克等"
+                }
+            ]
+        },
+        {
+            "id": "electronics",
+            "name": "电子产品",
+            "icon": "",
+            "description": "电子设备仓库",
+            "sub_categories": [
+                {
+                    "id": "phones",
+                    "name": "手机",
+                    "icon": "",
+                    "description": "智能手机及配件"
+                },
+                {
+                    "id": "laptops",
+                    "name": "笔记本",
+                    "icon": "",
+                    "description": "笔记本电脑及平板"
+                }
+            ]
+        },
+        {
+            "id": "furniture",
+            "name": "家具",
+            "icon": "",
+            "description": "家居家具",
+            "sub_categories": []
+        }
+    ]
+}

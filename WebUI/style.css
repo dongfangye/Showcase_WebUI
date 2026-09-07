@@ -51,6 +51,7 @@ body {
     overflow-y: auto;
 }
 
+/* ========== 导航项 ========== */
 .nav-item {
     display: flex;
     align-items: center;
@@ -65,6 +66,19 @@ body {
     user-select: none;
 }
 
+/* 一级分类 */
+.nav-item.parent {
+    font-weight: 600;
+    color: #cbd5e0;
+}
+
+/* 二级分类（缩进） */
+.nav-item.child {
+    padding-left: 44px;
+    font-size: 14px;
+    color: #8896b0;
+}
+
 .nav-item:hover {
     background: rgba(255, 255, 255, 0.06);
     color: #fff;
@@ -76,24 +90,55 @@ body {
     box-shadow: inset 3px 0 0 #6366f1;
 }
 
-.nav-item .icon {
-    font-size: 20px;
+/* 折叠指示器 */
+.nav-item .toggle-icon {
+    margin-left: auto;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    opacity: 0.6;
+}
+
+.nav-item .toggle-icon.expanded {
+    transform: rotate(90deg);
+}
+
+/* 子菜单容器 */
+.sub-menu {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-menu.open {
+    max-height: 500px;
+}
+
+/* ========== 导航图标（图片） ========== */
+.nav-item .nav-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 4px;
+}
+
+.nav-item.child .nav-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* 图标占位（空图标时保持对齐） */
+.nav-item .icon-placeholder {
     width: 28px;
-    text-align: center;
+    flex-shrink: 0;
+    display: inline-block;
 }
 
-.sidebar-footer {
-    padding: 16px 24px 0 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    margin-top: auto;
-}
-
-.user-info {
-    font-size: 14px;
-    color: #718096;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.nav-item.child .icon-placeholder {
+    width: 24px;
 }
 
 /* ========== 右侧主内容区 ========== */
@@ -254,10 +299,18 @@ body {
         justify-content: center;
         padding: 12px;
     }
-
-    .nav-item .icon {
-        font-size: 24px;
+    .nav-item.child {
+        padding-left: 12px;
+    }
+    .nav-item .icon-placeholder {
         width: auto;
+    }
+    .nav-item .nav-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .nav-item .toggle-icon {
+        display: none;
     }
 
     .content-header {
