@@ -17,10 +17,12 @@ body {
     display: flex;
     height: 100vh;
     width: 100vw;
+    position: relative;
 }
 
 /* ========== 左侧导航栏 ========== */
 .sidebar {
+    position: relative;
     width: fit-content;
     min-width: 160px;
     max-width: 250px;
@@ -32,6 +34,8 @@ body {
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.06);
     z-index: 10;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .logo {
@@ -67,8 +71,6 @@ body {
     margin-bottom: 4px;
     user-select: none;
 }
-
-
 
 /* 一级分类 */
 .nav-item.parent {
@@ -157,6 +159,7 @@ body {
     flex-direction: column;
     background: #f7f8fc;
     overflow: hidden;
+    position: relative; /* 作为折叠按钮的定位参考 */
 }
 
 .content-header {
@@ -292,36 +295,6 @@ body {
 
 /* ========== 响应式 ========== */
 @media (max-width: 768px) {
-    /* .sidebar {
-        width: 72px;
-        min-width: 72px;
-        padding: 12px 0;
-    }
-
-    .logo h2,
-    .nav-item span:not(.icon),
-    .user-info span {
-        display: none;
-    }
-
-    .nav-item {
-        justify-content: center;
-        padding: 12px;
-    }
-    .nav-item.child {
-        padding-left: 12px;
-    }
-    .nav-item .icon-placeholder {
-        width: auto;
-    }
-    .nav-item .nav-icon {
-        width: 28px;
-        height: 28px;
-    }
-    .nav-item .toggle-icon {
-        display: none;
-    }
-
     .content-header {
         padding: 16px 18px;
         flex-wrap: wrap;
@@ -339,24 +312,227 @@ body {
 
     .content-header h1 {
         font-size: 18px;
-    } */
-     /* 只调整内容区域，不改变侧边栏 */
-    .content-header {
-        padding: 16px 18px;
-        flex-wrap: wrap;
-        gap: 10px;
     }
+}
 
-    .content-body {
-        padding: 16px 18px;
-    }
+/* ========== 折叠按钮 ========== */
+.sidebar-toggle {
+    position:absolute;
 
-    .item-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 16px;
-    }
+    top:20px;
+    right:-14px;
 
-    .content-header h1 {
-        font-size: 18px;
+    width:28px;
+    height:28px;
+
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+    z-index:100;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* 按钮内的图标箭头 - 默认朝左 ◀ */
+.sidebar-toggle .toggle-icon-btn {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.sidebar-toggle:hover {
+    background: #f7fafc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* =================================
+   侧边栏折叠按钮
+================================= */
+
+
+.sidebar-toggle {
+
+    position:absolute;
+    left:calc(100% - 14px);
+
+    /* 右上角 */
+    top:20px;
+
+    /* sidebar宽度250px，按钮贴边 */
+    left:236px;
+
+
+
+    width:28px;
+
+    height:28px;
+
+
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:50%;
+
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+
+    cursor:pointer;
+
+
+
+    z-index:9999;
+
+
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.08);
+
+
+
+    transition:
+        left .3s ease,
+        transform .3s ease;
+
+
+
+    color:#4a5568;
+
+}
+
+
+
+/* 鼠标效果 */
+
+.sidebar-toggle:hover {
+
+    background:#f7fafc;
+
+}
+
+
+
+/* 箭头 */
+
+.toggle-icon-btn {
+
+    display:block;
+
+
+    font-size:12px;
+
+
+    line-height:1;
+
+
+    transition:
+        transform .3s ease;
+
+}
+
+
+
+/*
+   收缩状态
+
+   sidebar:
+   width 0
+
+   按钮移动到屏幕边缘
+*/
+
+
+.sidebar.collapsed 
++ 
+.sidebar-toggle {
+
+
+    left:-14px;
+
+}
+
+
+
+/*
+   箭头反向
+*/
+
+
+.sidebar-toggle.collapsed 
+.toggle-icon-btn {
+
+
+    transform:
+        rotate(180deg);
+
+}
+
+
+
+
+
+
+/* =================================
+   sidebar收缩
+================================= */
+
+
+.sidebar.collapsed {
+
+
+    width:0;
+
+    min-width:0;
+
+    max-width:0;
+
+
+    padding:0;
+
+
+    overflow:hidden;
+
+
+    border:none;
+
+}
+
+
+
+/* 隐藏内容 */
+
+.sidebar.collapsed .logo,
+
+.sidebar.collapsed .nav-menu,
+
+.sidebar.collapsed .sidebar-footer {
+
+
+    display:none;
+
+}
+
+/* ========== 响应式调整 ========== */
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        width: 24px;
+        height: 24px;
+        left: -12px;
+        font-size: 10px;
     }
 }

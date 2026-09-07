@@ -6,43 +6,82 @@
     <title>物品展示平台</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container">
-        <!-- 左侧导航栏 -->
-        <nav class="sidebar">
-            <div class="sidebar-toggle" id="sidebarToggle">
-                <span class="toggle-icon-btn">◀</span>
-            </div>
-            <div class="logo">
-                <h2>📦 展品馆</h2>
-            </div>
-            <ul class="nav-menu" id="nav-menu">
-                <!-- 由 JavaScript 动态生成 -->
-            </ul>
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <span>👤 访客</span>
-                </div>
-            </div>
-        </nav>
 
-        <!-- 右侧显示区域 -->
-        <main class="main-content">
-            <header class="content-header">
-                <h1 id="category-title">全部物品</h1>
-                <div class="header-actions">
-                    <span id="item-count">共 0 件</span>
-                    <button id="refresh-btn">🔄 刷新</button>
-                </div>
-            </header>
-            <div class="content-body">
-                <div id="item-grid" class="item-grid">
-                    <!-- 物品卡片由 JavaScript 动态生成 -->
-                </div>
+<body>
+
+<div class="container">
+
+    <!-- 左侧导航栏 -->
+    <nav class="sidebar" id="sidebar">
+
+        <div class="logo">
+            <h2>📦 展品馆</h2>
+        </div>
+
+        <ul class="nav-menu" id="nav-menu">
+            <!-- JS动态生成 -->
+        </ul>
+
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <span>👤 访客</span>
             </div>
-        </main>
+        </div>
+
+    </nav>
+
+
+    <!-- 折叠按钮（必须在sidebar外） -->
+    <div class="sidebar-toggle" id="sidebarToggle">
+        <span class="toggle-icon-btn">◀</span>
     </div>
 
-    <script src="script.js"></script>
+
+
+    <!-- 右侧内容 -->
+    <main class="main-content">
+
+        <header class="content-header">
+
+            <h1 id="category-title">
+                全部物品
+            </h1>
+
+
+            <div class="header-actions">
+
+                <span id="item-count">
+                    共0件
+                </span>
+
+
+                <button id="refresh-btn">
+                    🔄 刷新
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <div class="content-body">
+
+            <div id="item-grid" class="item-grid">
+                <!-- JS生成商品 -->
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
 </body>
 </html>

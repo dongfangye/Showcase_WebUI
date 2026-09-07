@@ -302,6 +302,72 @@ async function init() {
             </div>
         `;
     }
+    // ✅ 在数据加载完成后初始化折叠功能
+    initSidebarToggle();
+}
+// ============ 侧边栏折叠功能 ============
+
+function initSidebarToggle() {
+
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+
+    if (!sidebar || !toggleBtn) {
+        console.warn('侧边栏或按钮不存在');
+        return;
+    }
+
+
+
+    // 恢复状态
+    const isCollapsed =
+        localStorage.getItem('sidebarCollapsed') === 'true';
+
+
+
+    if (isCollapsed) {
+
+        sidebar.classList.add('collapsed');
+
+        toggleBtn.classList.add('collapsed');
+
+    }
+
+
+
+    toggleBtn.addEventListener('click', function(e){
+
+        e.stopPropagation();
+
+
+        sidebar.classList.toggle('collapsed');
+
+
+        const collapsed =
+            sidebar.classList.contains('collapsed');
+
+
+
+        toggleBtn.classList.toggle(
+            'collapsed',
+            collapsed
+        );
+
+
+
+        localStorage.setItem(
+            'sidebarCollapsed',
+            collapsed
+        );
+
+
+        window.dispatchEvent(
+            new Event('resize')
+        );
+
+    });
+
 }
 
 init();
