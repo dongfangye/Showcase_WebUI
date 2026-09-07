@@ -21,8 +21,9 @@ body {
 
 /* ========== 左侧导航栏 ========== */
 .sidebar {
-    width: 240px;
-    min-width: 240px;
+    width: fit-content;
+    min-width: 160px;
+    max-width: 250px;
     background: #ffffff;
     color: #2d3748;
     display: flex;
@@ -30,11 +31,12 @@ body {
     padding: 20px 0;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.06);
     z-index: 10;
+    flex-shrink: 0;
 }
 
 .logo {
-    padding: 0 24px 30px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0 24px 30px 16px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .logo h2 {
@@ -61,33 +63,40 @@ body {
     cursor: pointer;
     transition: all 0.25s ease;
     font-size: 15px;
-    color: #a0aec0;
+    color: #070707;
     margin-bottom: 4px;
     user-select: none;
 }
 
+
+
 /* 一级分类 */
 .nav-item.parent {
     font-weight: 600;
-    color: #cbd5e0;
+    color: #252b31;
+    padding-left: 16px;
 }
 
 /* 二级分类（缩进） */
 .nav-item.child {
-    padding-left: 44px;
+    padding-left: 36px;
     font-size: 14px;
     color: #8896b0;
 }
-
+/* 没有图标时，子级缩进相应减少 */
+.nav-item.child .icon-placeholder:empty,
+.nav-item.child .icon-placeholder:not(:has(*)) {
+    display: none;
+}
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.04);
+    color: #1a202c;
 }
 
 .nav-item.active {
-    background: rgba(99, 102, 241, 0.25);
-    color: #fff;
-    box-shadow: inset 3px 0 0 #6366f1;
+    background: rgba(49, 130, 206, 0.10);
+    color: #2b6cb0;
+    box-shadow: inset 3px 0 0 #3182ce;
 }
 
 /* 折叠指示器 */
@@ -283,7 +292,7 @@ body {
 
 /* ========== 响应式 ========== */
 @media (max-width: 768px) {
-    .sidebar {
+    /* .sidebar {
         width: 72px;
         min-width: 72px;
         padding: 12px 0;
@@ -313,6 +322,25 @@ body {
         display: none;
     }
 
+    .content-header {
+        padding: 16px 18px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .content-body {
+        padding: 16px 18px;
+    }
+
+    .item-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+    }
+
+    .content-header h1 {
+        font-size: 18px;
+    } */
+     /* 只调整内容区域，不改变侧边栏 */
     .content-header {
         padding: 16px 18px;
         flex-wrap: wrap;

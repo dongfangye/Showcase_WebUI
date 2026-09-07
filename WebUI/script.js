@@ -58,7 +58,6 @@ function generateNavMenu(categories) {
     // "全部" 选项（无图标）
     html += `
         <li class="nav-item parent active" data-category="all" data-parent="true">
-            <span class="icon-placeholder"></span>
             <span>全部物品</span>
         </li>
     `;
@@ -167,9 +166,8 @@ function bindNavEvents() {
             const category = this.dataset.category;
             const sub = this.dataset.sub;
 
-            // 移除其他子级高亮
-            const siblings = this.closest('.sub-menu').querySelectorAll('.nav-item.child');
-            siblings.forEach(s => s.classList.remove('active'));
+            // ✅ 清除所有子级的高亮（更彻底）
+            childItems.forEach(c => c.classList.remove('active'));
             this.classList.add('active');
 
             // 确保父级高亮
