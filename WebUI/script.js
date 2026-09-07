@@ -1,5 +1,6 @@
 // ============ 配置 ============
 const DES_JSON_PATH = '../Warehouse/des.json';
+const sidebar_icon_path = '../Warehouse/icons/'; // 侧边栏图标文件夹路径
 
 // ============ 全局状态 ============
 let categoryData = [];

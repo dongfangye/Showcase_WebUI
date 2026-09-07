@@ -3,7 +3,7 @@
         {
             "id": "clothing",
             "name": "衣服",
-            "icon": "",
+            "icon": "../Warehouse/icon/clothing.png",
             "description": "主要收纳衣服的仓库",
             "sub_categories": [
                 {
@@ -28,8 +28,8 @@
         },
         {
             "id": "electronics",
-            "name": "电子产品",
-            "icon": "",
+            "name": "袜子",
+            "icon": "../Warehouse/icon/socks.png",
             "description": "电子设备仓库",
             "sub_categories": [
                 {
