@@ -370,4 +370,15 @@ function initSidebarToggle() {
 
 }
 
+// 设置按钮
+const settingsBtn = document.getElementById('settings-btn');
+
+if(settingsBtn){
+    settingsBtn.addEventListener('click',()=>{
+        alert('打开设置');
+    });
+}
+
+
+
 init();
