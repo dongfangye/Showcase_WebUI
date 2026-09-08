@@ -1,6 +1,7 @@
 // ============ 配置 ============
 const DES_JSON_PATH = '../Warehouse/des.json';
 const sidebar_icon_path = '../Warehouse/icons/'; // 侧边栏图标文件夹路径
+const SETTING_JSON_PATH = "settings.json"; // 设置文件路径
 
 // ============ 全局状态 ============
 let categoryData = [];
@@ -370,15 +371,255 @@ function initSidebarToggle() {
 
 }
 
-// 设置按钮
-const settingsBtn = document.getElementById('settings-btn');
+// ============================
+// 设置面板
+// ============================
 
-if(settingsBtn){
-    settingsBtn.addEventListener('click',()=>{
-        alert('打开设置');
+const settingsBtn =
+document.getElementById('settings-btn');
+
+
+const settingsPanel =
+document.getElementById('settings-panel');
+
+
+const closeSettings =
+document.getElementById('close-settings');
+
+
+// 打开
+
+settingsBtn.addEventListener('click',()=>{
+
+    settingsPanel.classList.add('show');
+
+});
+
+
+// 关闭
+
+closeSettings.addEventListener('click',()=>{
+
+    settingsPanel.classList.remove('show');
+
+});
+
+
+
+// Tab切换
+
+document
+.querySelectorAll('.tab-btn')
+.forEach(btn=>{
+
+
+    btn.addEventListener('click',()=>{
+
+
+        let tab =
+        btn.dataset.tab;
+
+
+        document
+        .querySelectorAll('.tab-btn')
+        .forEach(b=>
+            b.classList.remove('active')
+        );
+
+
+        document
+        .querySelectorAll('.tab-content')
+        .forEach(c=>
+            c.classList.remove('active')
+        );
+
+
+        btn.classList.add('active');
+
+
+        document
+        .getElementById(tab)
+        .classList.add('active');
+
+
     });
+
+
+});
+
+async function loadSettings(){
+
+    try{
+
+        const response =
+        await fetch(SETTING_JSON_PATH);
+
+
+        if(!response.ok)
+            throw new Error('setting.json读取失败');
+
+
+        return await response.json();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        return {
+            tabs:[]
+        };
+
+    }
+
 }
 
+function generateSettingTabs(settings){
 
+
+    const tabs =
+    document.getElementById('settings-tabs');
+
+
+    const content =
+    document.getElementById('settings-content');
+
+
+    let tabHTML='';
+    let contentHTML='';
+
+
+
+    settings.tabs.forEach((tab,index)=>{
+
+
+        tabHTML += `
+
+        <button 
+        class="tab-btn ${index===0?'active':''}"
+        data-tab="${tab.id}">
+
+        ${tab.name}
+
+        </button>
+
+        `;
+
+
+
+        contentHTML += `
+
+        <div 
+        class="tab-content ${index===0?'active':''}"
+        id="${tab.id}">
+
+        ${generateSettingItems(tab.items)}
+
+        </div>
+
+        `;
+
+
+    });
+
+
+
+    tabs.innerHTML=tabHTML;
+
+    content.innerHTML=contentHTML;
+
+
+
+    bindSettingTabs();
+
+}
+
+function generateSettingItems(items){
+
+
+    return items.map(item=>{
+
+
+        let html=`
+
+
+        <div class="setting-item">
+
+        <label>
+        ${item.label}
+        </label>
+
+
+        `;
+
+
+
+        switch(item.type){
+
+
+            case "text":
+
+                html += `
+                <input 
+                type="text"
+                value="${item.value||''}">
+                `;
+                break;
+
+
+
+            case "checkbox":
+
+                html += `
+                <input 
+                type="checkbox"
+                ${item.value?'checked':''}>
+                `;
+                break;
+
+
+
+            case "select":
+
+                html += `
+                <select>
+                ${
+                item.options.map(o=>
+                `<option>${o}</option>`
+                ).join('')
+                }
+                </select>
+                `;
+
+                break;
+
+
+
+            case "range":
+
+                html += `
+                <input 
+                type="range"
+                value="${item.value||0}">
+                `;
+
+                break;
+
+
+        }
+
+
+
+        html += `
+        </div>
+        `;
+
+
+        return html;
+
+
+    }).join('');
+
+}
 
 init();

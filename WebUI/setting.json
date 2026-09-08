@@ -1,0 +1,18 @@
+{
+    "tabs":{
+        "param":{
+        "col_num": {
+            "ch_Name": "列数",
+            "default": 3
+        },
+        "card_size": {
+            "ch_Name": "卡片大小",
+            "default": ["medium", "small", "large"]
+        },
+        "card_style": {
+            "ch_Name": "卡片样式",
+            "default": "default"
+            }
+        }
+    }
+}
