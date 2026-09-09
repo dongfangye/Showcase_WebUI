@@ -1,153 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>物品展示平台</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
+    <div class="container">
+      <!-- 自定义右键菜单 -->
+      <div id="custom-context-menu" class="context-menu">
+        <div class="context-menu-item" data-action="refresh">刷新</div>
+        <div class="context-menu-item" data-action="copy">复制</div>
+        <div class="context-menu-item" data-action="select-all">全选</div>
 
-<div class="container">
+        <div class="context-menu-divider"></div>
 
-    <!-- 左侧导航栏 -->
-    <nav class="sidebar" id="sidebar">
-
+        <div class="context-menu-item" data-action="custom">我的功能</div>
+      </div>
+      <!-- 左侧导航栏 -->
+      <nav class="sidebar" id="sidebar">
         <div class="logo">
-            <h2>📦 展品馆</h2>
+          <h2>📦 展品馆</h2>
         </div>
 
         <ul class="nav-menu" id="nav-menu">
-            <!-- JS动态生成 -->
+          <!-- JS动态生成 -->
         </ul>
 
-
         <div class="sidebar-footer">
-            <button class="settings-btn" id="settings-btn" title="设置">
-                ⚙️
-            </button>
-
+          <button class="settings-btn" id="settings-btn" title="设置">
+            ⚙️
+          </button>
         </div>
+      </nav>
 
-    </nav>
-
-    <!-- 折叠把手：侧边栏右侧贯穿全高，整条可点击，实现折叠/展开 -->
-    <div class="sidebar-handle" id="sidebarToggle" title="折叠 / 展开侧边栏">
+      <!-- 折叠把手：侧边栏右侧贯穿全高，整条可点击，实现折叠/展开 -->
+      <div class="sidebar-handle" id="sidebarToggle" title="折叠 / 展开侧边栏">
         <span class="handle-arrow">◀</span>
-    </div>
+      </div>
 
-
-    <!-- 右侧内容 -->
-    <main class="main-content">
-
+      <!-- 右侧内容主区域 -->
+      <main class="main-content">
         <header class="content-header">
+          <h1 id="category-title">全部物品</h1>
 
-            <h1 id="category-title">
-                全部物品
-            </h1>
+          <div class="header-actions">
+            <span id="item-count"> 共0件 </span>
 
-            <div class="header-actions">
-
-                <span id="item-count">
-                    共0件
-                </span>
-
-
-                <button id="refresh-btn">
-                    🔄 刷新
-                </button>
-
-            </div>
-
+            <button id="refresh-btn">🔄 刷新</button>
+          </div>
         </header>
 
-
-
         <div class="content-body">
-
-            <div id="item-grid" class="item-grid">
-                <!-- JS生成商品 -->
-            </div>
-
+          <div id="item-grid" class="item-grid">
+            <!-- JS生成商品 -->
+          </div>
+        </div>
+      </main>
+      <!-- 弹窗自定义设置面板 -->
+      <div class="settings-panel" id="settings-panel">
+        <div class="settings-header">
+          <h2>设置</h2>
+          <button id="close-settings">✕</button>
         </div>
 
+        <!-- Tab（由 setting.json 动态生成） -->
+        <div class="settings-tabs" id="settings-tabs"></div>
 
-    </main>
-    <!-- 设置面板 -->
-<div class="settings-panel" id="settings-panel">
-
-    <div class="settings-header">
-        <h2>设置</h2>
-        <button id="close-settings">✕</button>
+        <div class="settings-content" id="settings-content"></div>
+      </div>
     </div>
-
-
-    <!-- Tab -->
-    <div class="settings-tabs" id="settings-tabs">
-
-    </div>
-
-
-    <div class="settings-content" id="settings-content">
-
-    </div>
-
-
-    <!-- 内容 -->
-
-    <div class="tab-content active" id="params">
-
-        <h3>参数设置</h3>
-
-        <label>
-            数据路径
-            <input value="../Warehouse/des.json">
-        </label>
-
-
-        <label>
-            自动刷新
-            <input type="checkbox">
-        </label>
-
-    </div>
-
-
-
-    <div class="tab-content" id="layout">
-
-        <h3>布局设置</h3>
-
-
-        <label>
-            卡片列数
-
-            <select>
-                <option>自动</option>
-                <option>4列</option>
-                <option>5列</option>
-            </select>
-
-        </label>
-
-
-        <label>
-            侧边栏宽度
-
-            <input type="range">
-        </label>
-
-
-    </div>
-
-
-</div>
-
-</div>
-
-
-<script src="script.js"></script>
-
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
