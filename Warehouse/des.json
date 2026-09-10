@@ -1,57 +1,305 @@
 {
-    "categories": [
+  "version": 1,
+  "categories": [
+    {
+      "id": "clothing",
+      "name": "衣服",
+      "icon": "../Warehouse/icon/clothing.png",
+      "description": "日常穿着的各类衣物，包括上衣、下装、外套、裙装、运动服等",
+      "sub_categories": [
         {
-            "id": "clothing",
-            "name": "衣服",
-            "icon": "../Warehouse/icon/clothing.png",
-            "description": "主要收纳衣服的仓库",
-            "sub_categories": [
-                {
-                    "id": "tops",
-                    "name": "上衣",
-                    "icon": "",
-                    "description": "包含短袖、长袖、外套等各种上衣类型"
-                },
-                {
-                    "id": "bottoms",
-                    "name": "下装",
-                    "icon": "",
-                    "description": "包含裤子、裙子等"
-                },
-                {
-                    "id": "outerwear",
-                    "name": "外套",
-                    "icon": "",
-                    "description": "包含风衣、夹克等"
-                }
-            ]
+          "id": "tops",
+          "name": "上衣",
+          "icon": "",
+          "description": "短袖、长袖、衬衫、卫衣、针织衫等各类上装",
+          "sub_categories": []
         },
         {
-            "id": "electronics",
-            "name": "袜子",
-            "icon": "../Warehouse/icon/socks.png",
-            "description": "电子设备仓库",
-            "sub_categories": [
-                {
-                    "id": "phones",
-                    "name": "手机",
-                    "icon": "",
-                    "description": "智能手机及配件"
-                },
-                {
-                    "id": "laptops",
-                    "name": "笔记本",
-                    "icon": "",
-                    "description": "笔记本电脑及平板"
-                }
-            ]
+          "id": "bottoms",
+          "name": "下装",
+          "icon": "",
+          "description": "长裤、短裤、牛仔裤、休闲裤等各类下装",
+          "sub_categories": []
         },
         {
-            "id": "furniture",
-            "name": "家具",
-            "icon": "",
-            "description": "家居家具",
-            "sub_categories": []
+          "id": "outerwear",
+          "name": "外套",
+          "icon": "",
+          "description": "夹克、风衣、大衣、羽绒服、防晒服等外穿衣物",
+          "sub_categories": []
+        },
+        {
+          "id": "shirts",
+          "name": "衬衫",
+          "icon": "",
+          "description": "长袖衬衫、短袖衬衫、休闲衬衫等",
+          "sub_categories": []
+        },
+        {
+          "id": "tshirts",
+          "name": "T恤",
+          "icon": "",
+          "description": "短袖T恤、长袖T恤、印花T恤等",
+          "sub_categories": []
+        },
+        {
+          "id": "sweaters",
+          "name": "毛衣与针织衫",
+          "icon": "",
+          "description": "毛衣、针织衫、开衫等针织类服装",
+          "sub_categories": []
+        },
+        {
+          "id": "hoodies",
+          "name": "卫衣",
+          "icon": "",
+          "description": "套头卫衣、连帽卫衣、拉链卫衣等",
+          "sub_categories": []
+        },
+        {
+          "id": "jeans",
+          "name": "牛仔服饰",
+          "icon": "",
+          "description": "牛仔裤、牛仔衣、牛仔短裤等牛仔类服饰",
+          "sub_categories": []
+        },
+        {
+          "id": "dresses",
+          "name": "裙装",
+          "icon": "",
+          "description": "连衣裙、半身裙及其他裙装",
+          "sub_categories": []
+        },
+        {
+          "id": "formalwear",
+          "name": "正装",
+          "icon": "",
+          "description": "西装、西裤、礼服及其他正式场合服装",
+          "sub_categories": []
+        },
+        {
+          "id": "sportswear",
+          "name": "运动服",
+          "icon": "",
+          "description": "运动上衣、运动裤、训练服、跑步服等",
+          "sub_categories": []
+        },
+        {
+          "id": "homewear",
+          "name": "家居服",
+          "icon": "",
+          "description": "居家休闲服、睡衣、睡裤等",
+          "sub_categories": []
         }
-    ]
+      ]
+    },
+    {
+      "id": "underwear",
+      "name": "内衣",
+      "icon": "../Warehouse/icon/underwear.svg",
+      "description": "贴身穿着的内衣、内裤及保暖打底类服饰",
+      "sub_categories": [
+        {
+          "id": "briefs",
+          "name": "三角内裤",
+          "icon": "../Warehouse/icon/briefs.svg",
+          "description": "各类三角版型内裤",
+          "sub_categories": []
+        },
+        {
+          "id": "briefs-girl",
+          "name": "女式三角内裤",
+          "icon": "../Warehouse/icon/briefs-girl.svg",
+          "description": "各类三角版型内裤",
+          "sub_categories": []
+        },
+        {
+          "id": "boxers",
+          "name": "平角内裤",
+          "icon": "../Warehouse/icon/boxers.svg",
+          "description": "平角、四角及宽松版型内裤",
+          "sub_categories": []
+        },
+        {
+          "id": "bras",
+          "name": "文胸",
+          "icon": "../Warehouse/icon/bras.svg",
+          "description": "日常文胸、运动文胸及其他胸衣",
+          "sub_categories": []
+        }
+      ]
+    },
+    {
+      "id": "girl-socks",
+      "name": "女士袜子",
+      "icon": "../Warehouse/icon/girl-socks.png",
+      "description": "女士特殊类袜子",
+      "sub_categories": [
+        {
+          "id": "ankle_socks",
+          "name": "船袜",
+          "icon": "../Warehouse/icon/ankle_socks.svg",
+          "description": "低帮、隐形及船型袜子",
+          "sub_categories": []
+        },
+        {
+          "id": "crew_socks",
+          "name": "中筒袜",
+          "icon": "../Warehouse/icon/crew_socks.svg",
+          "description": "袜筒长度到小腿中部附近的袜子",
+          "sub_categories": []
+        },
+        {
+          "id": "long_socks",
+          "name": "长筒袜",
+          "icon": "../Warehouse/icon/crew_socks.svg",
+          "description": "长筒及过膝类袜子",
+          "sub_categories": []
+        },
+        {
+          "id": "over-knee_socks",
+          "name": "过膝袜",
+          "icon": "../Warehouse/icon/crew_socks.svg",
+          "description": "过膝及超长类袜子",
+          "sub_categories": []
+        },
+        {
+          "id": "tights",
+          "name": "连裤袜",
+          "icon": "../Warehouse/icon/tights.svg",
+          "description": "包裹臀部及腿部的连裤袜、打底裤及丝袜",
+          "sub_categories": []
+        },
+        {
+          "id": "special_tights",
+          "name": "特殊款式连裤袜",
+          "icon": "",
+          "description": "特殊形状的连裤袜，如开裆、网状、花纹等",
+          "sub_categories": []
+        }
+      ]
+    },
+    {
+      "id": "socks",
+      "name": "袜子",
+      "icon": "../Warehouse/icon/socks.svg",
+      "description": "日常、运动、保暖及不同长度的各类袜子",
+      "sub_categories": [
+        {
+          "id": "short-socks",
+          "name": "短袜",
+          "icon": "",
+          "description": "脚踝及以下长度的短袜",
+          "sub_categories": []
+        },
+        {
+          "id": "long-socks",
+          "name": "长袜",
+          "icon": "",
+          "description": "膝盖一下及小腿长度的长袜",
+          "sub_categories": []
+        }
+      ]
+    },
+    {
+      "id": "shoes",
+      "name": "鞋类",
+      "icon": "../Warehouse/icon/shoes.svg",
+      "description": "日常、运动、正式及季节性鞋履",
+      "sub_categories": [
+        {
+          "id": "sneakers",
+          "name": "运动鞋",
+          "icon": "",
+          "description": "跑鞋、训练鞋、篮球鞋及综合运动鞋",
+          "sub_categories": []
+        },
+        {
+          "id": "casual_shoes",
+          "name": "休闲鞋",
+          "icon": "",
+          "description": "适合日常穿着的休闲鞋类",
+          "sub_categories": []
+        },
+        {
+          "id": "leather_shoes",
+          "name": "皮鞋",
+          "icon": "",
+          "description": "商务皮鞋、正装皮鞋及其他皮质鞋履",
+          "sub_categories": []
+        },
+        {
+          "id": "boots",
+          "name": "靴子",
+          "icon": "",
+          "description": "短靴、长靴、工装靴及冬季靴类",
+          "sub_categories": []
+        },
+        {
+          "id": "sandals",
+          "name": "凉鞋",
+          "icon": "",
+          "description": "凉鞋及夏季开放式鞋履",
+          "sub_categories": []
+        },
+        {
+          "id": "slippers",
+          "name": "拖鞋",
+          "icon": "",
+          "description": "居家拖鞋、浴室拖鞋及外穿拖鞋",
+          "sub_categories": []
+        }
+      ]
+    },
+    {
+      "id": "accessories",
+      "name": "服饰配件",
+      "icon": "../Warehouse/icon/accessories.svg",
+      "description": "用于穿搭和日常使用的各类服饰配件",
+      "sub_categories": [
+        {
+          "id": "hats",
+          "name": "帽子",
+          "icon": "",
+          "description": "棒球帽、遮阳帽、针织帽等",
+          "sub_categories": []
+        },
+        {
+          "id": "belts",
+          "name": "腰带",
+          "icon": "",
+          "description": "皮带、帆布腰带及其他腰带",
+          "sub_categories": []
+        },
+        {
+          "id": "scarves",
+          "name": "围巾",
+          "icon": "",
+          "description": "围巾、丝巾及保暖围脖",
+          "sub_categories": []
+        },
+        {
+          "id": "gloves",
+          "name": "手套",
+          "icon": "",
+          "description": "保暖手套、运动手套及日常手套",
+          "sub_categories": []
+        },
+        {
+          "id": "ties",
+          "name": "领带与领结",
+          "icon": "",
+          "description": "领带、领结及正装搭配配件",
+          "sub_categories": []
+        },
+        {
+          "id": "bags",
+          "name": "包袋",
+          "icon": "",
+          "description": "背包、手提包、单肩包及日常收纳包",
+          "sub_categories": []
+        }
+      ]
+    }
+  ]
 }

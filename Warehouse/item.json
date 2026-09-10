@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "item_000001",
+
+      "name": "白色短袖T恤",
+
+      "category_id": "tops",
+
+      "description": "夏季白色纯棉短袖",
+
+      "images": [],
+
+      "cover_image": "",
+
+      "tags": ["白色", "夏季", "短袖"],
+
+      "quantity": 1,
+
+      "status": "normal",
+
+      "favorite": false,
+
+      "sort_order": 1000,
+
+      "created_at": "2026-09-10T10:30:00",
+      "updated_at": "2026-09-10T10:30:00",
+
+      "attributes": {
+        "品牌": "Uniqlo",
+        "颜色": "白色",
+        "尺码": "L",
+        "材质": "纯棉"
+      },
+
+      "notes": ""
+    }
+  ]
+}

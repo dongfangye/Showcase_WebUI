@@ -12,7 +12,7 @@ from pathlib import Path
 from functools import partial
 
 from Modules.UI.Find_Chrome import find_chrome
-from Modules.ModifyJson import (update_json_file, update_object_by_id,)
+from Modules.ModifyJson import (update_json_file, update_object_by_id, reorder_categories,)
 
 def open_browser(url, delay=1.0):
     """打开浏览器窗口。不监控其退出（Chrome 多进程/单例机制会导致误判）。"""

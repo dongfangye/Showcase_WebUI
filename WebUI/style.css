@@ -229,6 +229,45 @@ body {
   color: #4a5568;
 }
 
+.header-action-btn {
+  height: 34px;
+
+  padding: 0 12px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  color: #374151;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.header-action-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+.header-action-btn:active {
+  transform: scale(0.97);
+}
+
 #item-count {
   background: #edf2f7;
   padding: 4px 14px;
