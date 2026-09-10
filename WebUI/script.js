@@ -373,9 +373,20 @@ const settingsPanel = document.getElementById("settings-panel");
 
 const closeSettings = document.getElementById("close-settings");
 
-// 打开
+// 设置是否已加载，避免重复请求 / 重复绑定
+let settingsLoaded = false;
 
-settingsBtn.addEventListener("click", () => {
+// 打开（首次打开时加载 setting.json 并渲染）
+
+settingsBtn.addEventListener("click", async () => {
+  if (!settingsLoaded) {
+    const settings = await loadSettings();
+
+    generateSettingTabs(settings);
+
+    settingsLoaded = settings.tabs.length > 0;
+  }
+
   settingsPanel.classList.add("show");
 });
 
@@ -386,9 +397,13 @@ closeSettings.addEventListener("click", () => {
 });
 
 // Tab切换（事件委托，动态生成的按钮也能生效）
+let settingTabsBound = false;
+
 function bindSettingTabs() {
   const tabsContainer = document.getElementById("settings-tabs");
-  if (!tabsContainer) return;
+  if (!tabsContainer || settingTabsBound) return;
+
+  settingTabsBound = true;
 
   tabsContainer.addEventListener("click", (e) => {
     const btn = e.target.closest(".tab-btn");
@@ -411,6 +426,141 @@ function bindSettingTabs() {
   });
 }
 
+// 支持的控件类型
+const SETTING_TYPES = [
+  "text",
+  "number",
+  "textarea",
+  "checkbox",
+  "select",
+  "range",
+];
+
+// HTML 属性转义，避免配置里的引号 / 尖括号破坏结构
+function escapeAttr(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// 去掉 // 与 /* */ 注释（字符串内部的 // 不会被误删）
+function stripJsonComments(text) {
+  let result = "";
+
+  let inString = false;
+  let inLineComment = false;
+  let inBlockComment = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    // 行注释：直到换行为止
+    if (inLineComment) {
+      if (char === "\n") {
+        inLineComment = false;
+        result += char;
+      }
+      continue;
+    }
+
+    // 块注释：直到 */
+    if (inBlockComment) {
+      if (char === "*" && next === "/") {
+        inBlockComment = false;
+        i++;
+      }
+      continue;
+    }
+
+    // 字符串内部：原样保留（处理 \" 转义）
+    if (inString) {
+      result += char;
+
+      if (char === "\\") {
+        if (next !== undefined) {
+          result += next;
+          i++;
+        }
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      result += char;
+      continue;
+    }
+
+    if (char === "/" && next === "/") {
+      inLineComment = true;
+      i++;
+      continue;
+    }
+
+    if (char === "/" && next === "*") {
+      inBlockComment = true;
+      i++;
+      continue;
+    }
+
+    result += char;
+  }
+
+  return result;
+}
+
+// 去掉对象 / 数组结尾的多余逗号（字符串内部的逗号不受影响）
+function stripTrailingCommas(text) {
+  let result = "";
+  let inString = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+
+    if (inString) {
+      result += char;
+
+      if (char === "\\") {
+        if (i + 1 < text.length) {
+          result += text[i + 1];
+          i++;
+        }
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      result += char;
+      continue;
+    }
+
+    if (char === ",") {
+      let j = i + 1;
+      while (j < text.length && /\s/.test(text[j])) j++;
+
+      // 后面紧跟 } 或 ]，说明是多余逗号，跳过
+      if (text[j] === "}" || text[j] === "]") continue;
+    }
+
+    result += char;
+  }
+
+  return result;
+}
+
+// 解析配置文本：允许注释与多余逗号（JSONC）
+function parseJsonc(text) {
+  return JSON.parse(stripTrailingCommas(stripJsonComments(text)));
+}
+
 // 根据 default 值推断控件类型
 function inferSettingType(value) {
   if (Array.isArray(value)) return "select";
@@ -419,30 +569,72 @@ function inferSettingType(value) {
   return "text";
 }
 
+// 决定最终控件类型：显式 type 优先，否则按 default 推断
+function resolveSettingType(val) {
+  if (val.type && SETTING_TYPES.includes(val.type)) return val.type;
+  return inferSettingType(val.default);
+}
+
+// 把 setting.json 里的单个字段配置转成统一的 item 结构
+function buildSettingItem(key, rawVal) {
+  // 兼容简写："col_num": 3 等价于 { "default": 3 }
+  const val =
+    rawVal && typeof rawVal === "object" && !Array.isArray(rawVal)
+      ? rawVal
+      : { default: rawVal };
+
+  const type = resolveSettingType(val);
+
+  // 下拉框选项：options 优先，其次用 default 数组
+  let options = val.options;
+  if (!Array.isArray(options) && Array.isArray(val.default)) {
+    options = val.default;
+  }
+
+  let value = val.value !== undefined ? val.value : val.default;
+
+  if (type === "select") {
+    if (value === undefined || Array.isArray(value)) {
+      value = (options || [])[0];
+    }
+  } else if (Array.isArray(value)) {
+    value = value[0];
+  }
+
+  return {
+    key,
+    label: val.ch_Name || key,
+    type,
+    value,
+    options,
+    min: val.min,
+    max: val.max,
+    step: val.step,
+    placeholder: val.placeholder,
+  };
+}
+
 async function loadSettings() {
   try {
-    const response = await fetch(SETTING_JSON_PATH);
+    // 加上 no-store，避免浏览器缓存旧的 setting.json
+    const response = await fetch(SETTING_JSON_PATH, { cache: "no-store" });
 
-    if (!response.ok) throw new Error(`setting.json 读取失败: HTTP ${response.status}`);
+    if (!response.ok)
+      throw new Error(`setting.json 读取失败: HTTP ${response.status}`);
 
-    const data = await response.json();
+    // setting.json 允许写注释（JSONC），所以先取文本再手动解析
+    const text = await response.text();
+
+    const data = parseJsonc(text);
 
     // 统一转换成 { tabs: [{ id, name, items: [{ key, label, type, value, options }] }] }
     return {
       tabs: Object.entries(data.tabs || {}).map(([tabId, tabItems]) => ({
         id: tabId,
         name: tabId,
-        items: Object.entries(tabItems || {}).map(([key, val]) => {
-          const def = val.default;
-          const type = inferSettingType(def);
-          return {
-            key,
-            label: val.ch_Name || key,
-            type,
-            value: Array.isArray(def) ? def[0] : def,
-            options: Array.isArray(def) ? def : undefined,
-          };
-        }),
+        items: Object.entries(tabItems || {}).map(([key, val]) =>
+          buildSettingItem(key, val),
+        ),
       })),
     };
   } catch (error) {
@@ -450,6 +642,7 @@ async function loadSettings() {
 
     return {
       tabs: [],
+      error: error.message,
     };
   }
 }
@@ -458,6 +651,30 @@ function generateSettingTabs(settings) {
   const tabs = document.getElementById("settings-tabs");
 
   const content = document.getElementById("settings-content");
+
+  if (!tabs || !content) {
+    console.error("找不到 #settings-tabs 或 #settings-content 容器");
+    return;
+  }
+
+  // 没有读到任何配置时给出提示，方便排查
+  if (!settings.tabs || settings.tabs.length === 0) {
+    tabs.innerHTML = "";
+
+    const reason = settings.error
+      ? `解析失败：${settings.error}`
+      : "未找到配置项；请通过 http 服务器打开页面（直接双击 html 会被浏览器拦截）";
+
+    content.innerHTML = `
+      <div class="empty-state">
+        <span class="big-icon">⚠️</span>
+        未能加载 setting.json<br>
+        <span style="font-size: 14px; color: #94a3b8;">${escapeAttr(reason)}</span>
+      </div>
+    `;
+
+    return;
+  }
 
   let tabHTML = "";
   let contentHTML = "";
@@ -485,6 +702,20 @@ function generateSettingTabs(settings) {
   content.innerHTML = contentHTML;
 
   bindSettingTabs();
+
+  // 允许外部读取当前设置值
+  window.getSettingsValues = () => {
+    const values = {};
+
+    content.querySelectorAll("[data-key]").forEach((el) => {
+      if (el.type === "checkbox") values[el.dataset.key] = el.checked;
+      else if (el.type === "range" || el.type === "number")
+        values[el.dataset.key] = Number(el.value);
+      else values[el.dataset.key] = el.value;
+    });
+
+    return values;
+  };
 }
 
 function generateSettingItems(items) {
@@ -498,7 +729,30 @@ function generateSettingItems(items) {
                 <input
                 type="text"
                 data-key="${item.key}"
-                value="${item.value ?? ""}">
+                placeholder="${escapeAttr(item.placeholder)}"
+                value="${escapeAttr(item.value)}">
+                `;
+          break;
+
+        case "number":
+          control = `
+                <input
+                type="number"
+                data-key="${item.key}"
+                placeholder="${escapeAttr(item.placeholder)}"
+                ${item.min !== undefined ? `min="${escapeAttr(item.min)}"` : ""}
+                ${item.max !== undefined ? `max="${escapeAttr(item.max)}"` : ""}
+                ${item.step !== undefined ? `step="${escapeAttr(item.step)}"` : ""}
+                value="${escapeAttr(item.value)}">
+                `;
+          break;
+
+        case "textarea":
+          control = `
+                <textarea
+                data-key="${item.key}"
+                rows="3"
+                placeholder="${escapeAttr(item.placeholder)}">${escapeAttr(item.value)}</textarea>
                 `;
           break;
 
@@ -515,10 +769,14 @@ function generateSettingItems(items) {
           control = `
                 <select data-key="${item.key}">
                 ${(item.options || [])
-                  .map(
-                    (o) =>
-                      `<option value="${o}" ${o === item.value ? "selected" : ""}>${o}</option>`,
-                  )
+                  .map((o) => {
+                    const optValue = o && typeof o === "object" ? o.value : o;
+                    const optLabel =
+                      o && typeof o === "object" ? (o.label ?? o.value) : o;
+                    return `<option value="${escapeAttr(optValue)}" ${
+                      String(optValue) === String(item.value) ? "selected" : ""
+                    }>${escapeAttr(optLabel)}</option>`;
+                  })
                   .join("")}
                 </select>
                 `;
@@ -529,9 +787,12 @@ function generateSettingItems(items) {
                 <input
                 type="range"
                 data-key="${item.key}"
-                min="1"
-                max="${Math.max(10, (item.value || 0) * 2)}"
-                value="${item.value || 0}">
+                min="${item.min ?? 1}"
+                max="${item.max ?? Math.max(10, (item.value || 0) * 2)}"
+                step="${item.step ?? 1}"
+                value="${item.value || 0}"
+                oninput="this.nextElementSibling.textContent = this.value">
+                <span class="range-value">${item.value || 0}</span>
                 `;
           break;
       }

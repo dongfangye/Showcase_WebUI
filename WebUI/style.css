@@ -540,6 +540,72 @@ body {
   display: block;
 }
 
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* 设置项表单控件 */
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+.setting-item > label {
+  flex: 0 0 90px;
+  font-size: 14px;
+  color: #334155;
+}
+
+.setting-item input[type="text"],
+.setting-item input[type="number"],
+.setting-item textarea,
+.setting-item select {
+  flex: 1;
+  min-width: 0;
+
+  padding: 6px 8px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  outline: none;
+}
+
+.setting-item input[type="text"]:focus,
+.setting-item input[type="number"]:focus,
+.setting-item textarea:focus,
+.setting-item select:focus {
+  border-color: #3182ce;
+}
+
+.setting-item input[type="range"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+
+  cursor: pointer;
+}
+
+.range-value {
+  flex: 0 0 32px;
+
+  text-align: right;
+  font-size: 13px;
+  color: #64748b;
+}
+
 .context-menu {
   position: fixed;
   display: none;
