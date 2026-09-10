@@ -159,13 +159,53 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #f5f6f8;
+
+  /* 动画开始前的底色 */
+  background: #f7f8fa;
+
   overflow: hidden;
-  position: relative; /* 作为折叠按钮的定位参考 */
+  position: relative;
+}
+
+/* 动态扩展的颜色层 */
+.main-content::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  /* 固定颜色，不再渐变 */
+  background: rgba(147, 197, 253, 0.32);
+
+  /* 从左上角开始 */
+  clip-path: circle(0% at 0% 0%);
+
+  /* 向右下角扩散 */
+  animation: background-expand 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 扩散动画 */
+@keyframes background-expand {
+  0% {
+    clip-path: circle(0% at 0% 0%);
+  }
+
+  100% {
+    clip-path: circle(180% at 0% 0%);
+  }
+}
+
+/* 内容显示在背景之上 */
+.main-content > * {
+  position: relative;
+  z-index: 1;
 }
 
 .content-header {
-  padding: 24px 32px;
+  padding: 8px 32px;
   background: #ffffff;
   border-bottom: 1px solid #e8ecf1;
   display: flex;
