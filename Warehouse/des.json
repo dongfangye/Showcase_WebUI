@@ -43,27 +43,6 @@
           "sub_categories": []
         },
         {
-          "id": "sweaters",
-          "name": "毛衣与针织衫",
-          "icon": "",
-          "description": "毛衣、针织衫、开衫等针织类服装",
-          "sub_categories": []
-        },
-        {
-          "id": "hoodies",
-          "name": "卫衣",
-          "icon": "",
-          "description": "套头卫衣、连帽卫衣、拉链卫衣等",
-          "sub_categories": []
-        },
-        {
-          "id": "jeans",
-          "name": "牛仔服饰",
-          "icon": "",
-          "description": "牛仔裤、牛仔衣、牛仔短裤等牛仔类服饰",
-          "sub_categories": []
-        },
-        {
           "id": "dresses",
           "name": "裙装",
           "icon": "",
@@ -71,22 +50,8 @@
           "sub_categories": []
         },
         {
-          "id": "formalwear",
-          "name": "正装",
-          "icon": "",
-          "description": "西装、西裤、礼服及其他正式场合服装",
-          "sub_categories": []
-        },
-        {
-          "id": "sportswear",
-          "name": "运动服",
-          "icon": "",
-          "description": "运动上衣、运动裤、训练服、跑步服等",
-          "sub_categories": []
-        },
-        {
-          "id": "homewear",
-          "name": "家居服",
+          "id": "jk-uniform",
+          "name": "jk制服",
           "icon": "",
           "description": "居家休闲服、睡衣、睡裤等",
           "sub_categories": []
@@ -215,20 +180,6 @@
           "sub_categories": []
         },
         {
-          "id": "casual_shoes",
-          "name": "休闲鞋",
-          "icon": "",
-          "description": "适合日常穿着的休闲鞋类",
-          "sub_categories": []
-        },
-        {
-          "id": "leather_shoes",
-          "name": "皮鞋",
-          "icon": "",
-          "description": "商务皮鞋、正装皮鞋及其他皮质鞋履",
-          "sub_categories": []
-        },
-        {
           "id": "boots",
           "name": "靴子",
           "icon": "",
@@ -240,13 +191,6 @@
           "name": "凉鞋",
           "icon": "",
           "description": "凉鞋及夏季开放式鞋履",
-          "sub_categories": []
-        },
-        {
-          "id": "slippers",
-          "name": "拖鞋",
-          "icon": "",
-          "description": "居家拖鞋、浴室拖鞋及外穿拖鞋",
           "sub_categories": []
         }
       ]
@@ -262,41 +206,6 @@
           "name": "帽子",
           "icon": "",
           "description": "棒球帽、遮阳帽、针织帽等",
-          "sub_categories": []
-        },
-        {
-          "id": "belts",
-          "name": "腰带",
-          "icon": "",
-          "description": "皮带、帆布腰带及其他腰带",
-          "sub_categories": []
-        },
-        {
-          "id": "scarves",
-          "name": "围巾",
-          "icon": "",
-          "description": "围巾、丝巾及保暖围脖",
-          "sub_categories": []
-        },
-        {
-          "id": "gloves",
-          "name": "手套",
-          "icon": "",
-          "description": "保暖手套、运动手套及日常手套",
-          "sub_categories": []
-        },
-        {
-          "id": "ties",
-          "name": "领带与领结",
-          "icon": "",
-          "description": "领带、领结及正装搭配配件",
-          "sub_categories": []
-        },
-        {
-          "id": "bags",
-          "name": "包袋",
-          "icon": "",
-          "description": "背包、手提包、单肩包及日常收纳包",
           "sub_categories": []
         }
       ]

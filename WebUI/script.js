@@ -35,6 +35,24 @@ async function loadCategoryData() {
   }
 }
 
+async function postJson(url, data) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || `HTTP ${response.status}`);
+  }
+
+  return result;
+}
+
 // ============ 生成图标 HTML ============
 function getIconHtml(iconPath, altText) {
   if (iconPath && iconPath.trim() !== "") {
@@ -73,12 +91,28 @@ function generateNavMenu(categories) {
     const iconDisplay = iconHtml || `<span class="icon-placeholder"></span>`;
 
     html += `
-            <li class="nav-item parent" data-category="${catId}" data-parent="true">
-                ${iconDisplay}
-                <span>${cat.name}</span>
-                ${hasChildren ? `<span class="toggle-icon">▶</span>` : ""}
-            </li>
-        `;
+    <li
+      class="nav-item parent"
+      data-category="${catId}"
+      data-parent="true"
+    >
+        ${iconDisplay}
+
+        <span class="nav-label">
+            ${escapeHtml(cat.name)}
+        </span>
+
+        <button
+          class="add-subcategory-btn"
+          type="button"
+          title="新增子分类"
+        >
+            ＋
+        </button>
+
+        ${hasChildren ? `<span class="toggle-icon">▶</span>` : ""}
+    </li>
+`;
 
     // 子分类
     if (hasChildren) {
@@ -91,17 +125,183 @@ function generateNavMenu(categories) {
         html += `
                     <li class="nav-item child" data-category="${catId}" data-sub="${subId}">
                         ${subIconDisplay}
-                        <span>${sub.name}</span>
+                        <span class="nav-label">
+                          ${escapeHtml(sub.name)}
+                        </span>
                     </li>
                 `;
       });
       html += `</ul>`;
     }
   });
-
+  html += `
+    <li
+      class="nav-item add-category-item"
+      id="add-category-item"
+    >
+        <span>＋ 新增分类</span>
+    </li>
+`;
   navMenu.innerHTML = html;
   bindNavEvents();
 }
+
+navMenu.addEventListener("click", async function (event) {
+  // =========================
+  // 新增一级分类
+  // =========================
+  const addCategory = event.target.closest("#add-category-item");
+
+  if (addCategory) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    await createCategory(null);
+
+    return;
+  }
+
+  // =========================
+  // 新增二级分类
+  // =========================
+  const addSubBtn = event.target.closest(".add-subcategory-btn");
+
+  if (addSubBtn) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const parent = addSubBtn.closest(".nav-item.parent");
+
+    if (!parent) return;
+
+    await createCategory(parent.dataset.category);
+  }
+});
+
+function startRenameCategory(navItem, label) {
+  if (navItem.classList.contains("editing")) {
+    return;
+  }
+
+  navItem.classList.add("editing");
+
+  const oldName = label.textContent.trim();
+
+  // 二级分类用 data-sub
+  // 一级分类用 data-category
+  const categoryId = navItem.classList.contains("child")
+    ? navItem.dataset.sub
+    : navItem.dataset.category;
+
+  const input = document.createElement("input");
+
+  input.type = "text";
+  input.className = "nav-edit-input";
+  input.value = oldName;
+
+  label.style.display = "none";
+
+  label.insertAdjacentElement("afterend", input);
+
+  input.focus();
+  input.select();
+
+  let finished = false;
+
+  async function finish(save) {
+    if (finished) return;
+
+    finished = true;
+
+    const newName = input.value.trim();
+
+    // Esc 或空字符串
+    if (!save || !newName || newName === oldName) {
+      input.remove();
+      label.style.display = "";
+      navItem.classList.remove("editing");
+      return;
+    }
+
+    try {
+      input.disabled = true;
+
+      const result = await postJson("/api/category/rename", {
+        id: categoryId,
+        name: newName,
+      });
+
+      // 使用后端返回的新 JSON
+      categoryData = result.data.categories || [];
+
+      // 如果当前页面正显示这个分类，
+      // 顺便更新标题
+      if (currentCategory === categoryId || currentSubCategory === categoryId) {
+        categoryTitle.textContent = newName;
+      }
+
+      generateNavMenu(categoryData);
+
+      restoreNavSelection();
+    } catch (error) {
+      console.error("修改分类失败:", error);
+
+      alert(`修改失败：${error.message}`);
+
+      input.remove();
+      label.style.display = "";
+      navItem.classList.remove("editing");
+    }
+  }
+
+  input.addEventListener("keydown", function (event) {
+    event.stopPropagation();
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      finish(true);
+    }
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+
+      finish(false);
+    }
+  });
+
+  input.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  input.addEventListener("dblclick", (event) => {
+    event.stopPropagation();
+  });
+
+  input.addEventListener("blur", () => {
+    finish(true);
+  });
+}
+
+navMenu.addEventListener("dblclick", function (event) {
+  const label = event.target.closest(".nav-label");
+
+  if (!label) return;
+
+  const navItem = label.closest(".nav-item");
+
+  if (!navItem) return;
+
+  // “全部物品”不允许修改
+  if (navItem.dataset.category === "all") {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  startRenameCategory(navItem, label);
+});
 
 // ============ 绑定导航事件 ============
 function bindNavEvents() {
@@ -946,6 +1146,15 @@ function customFunction() {
   console.log("当前右键元素：", currentTarget);
 
   alert("执行自定义功能");
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 init();

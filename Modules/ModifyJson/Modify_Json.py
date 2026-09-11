@@ -647,3 +647,95 @@ def update_object_by_id(
         )
 
     return data
+
+def add_category(
+    project_root,
+    relative_path,
+    category,
+    parent_id=None,
+):
+    """
+    新增一级分类或二级分类。
+
+    parent_id=None:
+        添加到 categories
+
+    parent_id="clothing":
+        添加到 clothing.sub_categories
+    """
+
+    project_root = Path(project_root).resolve()
+    json_path = (project_root / relative_path).resolve()
+
+    try:
+        json_path.relative_to(project_root)
+    except ValueError:
+        raise ValueError("禁止修改项目目录之外的文件")
+
+    if json_path.suffix.lower() != ".json":
+        raise ValueError("只允许修改 JSON 文件")
+
+    if not json_path.is_file():
+        raise FileNotFoundError(
+            f"JSON 文件不存在：{relative_path}"
+        )
+
+    if not isinstance(category, dict):
+        raise ValueError("category 必须是字典")
+
+    category_id = str(category.get("id", "")).strip()
+    category_name = str(category.get("name", "")).strip()
+
+    if not category_id:
+        raise ValueError("分类 id 不能为空")
+
+    if not category_name:
+        raise ValueError("分类名称不能为空")
+
+    with _JSON_WRITE_LOCK:
+        data = _load_json(json_path)
+
+        categories = data.setdefault("categories", [])
+
+        # ID 必须唯一
+        if _find_category(categories, category_id):
+            raise ValueError(
+                f"分类 ID 已存在：{category_id}"
+            )
+
+        new_category = {
+            "id": category_id,
+            "name": category_name,
+            "icon": category.get("icon", ""),
+            "sub_categories": category.get(
+                "sub_categories",
+                [],
+            ),
+        }
+
+        if parent_id is None:
+            # 新增一级分类
+            categories.append(new_category)
+
+        else:
+            # 新增二级分类
+            parent = _find_category(
+                categories,
+                parent_id,
+            )
+
+            if parent is None:
+                raise KeyError(
+                    f"找不到父分类：{parent_id}"
+                )
+
+            sub_categories = parent.setdefault(
+                "sub_categories",
+                [],
+            )
+
+            sub_categories.append(new_category)
+
+        _save_json(json_path, data)
+
+    return data
